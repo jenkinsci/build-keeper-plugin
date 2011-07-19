@@ -71,6 +71,10 @@ public abstract class PeriodAndFailedPolicy extends BuildKeeperPolicy {
             return FormValidation.validatePositiveInteger(value);
         }
 
+        public int getDefaultBuildPeriod() {
+            return 10;
+        }
+
     }
 
 }

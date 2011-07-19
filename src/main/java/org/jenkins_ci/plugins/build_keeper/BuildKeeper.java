@@ -84,6 +84,10 @@ public class BuildKeeper extends BuildWrapper {
             return true;
         }
 
+        public BuildKeeperPolicy.BuildKeeperPolicyDescriptor getDefaultPolicy() {
+            return Hudson.getInstance().getDescriptorByType(ByDayPolicy.ByDayPolicyDescriptor.class);
+        }
+
     }
 
     public Object readResolve() {

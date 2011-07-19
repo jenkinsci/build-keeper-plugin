@@ -26,7 +26,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 
     <f:entry title="${%buildPeriod}" field="buildPeriod">
-        <f:textbox/>
+        <f:textbox default="${descriptor.defaultBuildPeriod}"/>
     </f:entry>
     <f:entry title="${%dontKeepFailed}" field="dontKeepFailed">
         <f:checkbox/>

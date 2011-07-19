@@ -24,17 +24,10 @@
 
 package org.jenkins_ci.plugins.build_keeper;
 
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
 import hudson.model.FreeStyleProject;
-import hudson.model.Result;
 import org.jvnet.hudson.test.HudsonTestCase;
-import org.jvnet.hudson.test.TestBuilder;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static org.jenkins_ci.plugins.build_keeper.Helper.buildAndAssertKeepForever;
 
 public class BuildKeeperTest extends HudsonTestCase {
 
@@ -100,16 +93,6 @@ public class BuildKeeperTest extends HudsonTestCase {
         buildAndAssertKeepForever(true, project);
     }
     
-    private void buildAndAssertKeepForever(final boolean expectedKeep, final FreeStyleProject project, final int times) throws Exception {
-        for (int i = 0; i < times; i++) {
-            buildAndAssertKeepForever(expectedKeep, project);
-        }
-    }
-
-    private void buildAndAssertKeepForever(final boolean expectedKeep, final FreeStyleProject project) throws Exception {
-        assertEquals(expectedKeep, project.scheduleBuild2(0).get().isKeepLog());
-    }
-
     private BuildKeeper createBuildKeeper(final int buildPeriod) {
         return createBuildKeeper(buildPeriod, false);
     }
@@ -122,29 +105,6 @@ public class BuildKeeperTest extends HudsonTestCase {
         final BuildKeeperPolicy policy = countFromLastKept ? new KeepSincePolicy(buildPeriod, dontKeepFailed)
                                                            : new BuildNumberPolicy(buildPeriod, dontKeepFailed);
         return new BuildKeeper(policy);
-    }
-
-    private static class PredictableResultBuilder extends TestBuilder {
-
-        private final List<Integer> successful = new ArrayList<Integer>();
-
-        public PredictableResultBuilder(final int... successfulBuilds) {
-            for (int successfulBuild : successfulBuilds) {
-                successful.add(successfulBuild);
-            }
-        }
-
-        @Override
-        public boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener)
-                                                                                            throws InterruptedException, IOException {
-            if (successful.contains(build.getNumber())) {
-                build.setResult(Result.SUCCESS);
-            } else {
-                build.setResult(Result.FAILURE);
-            }
-            return true;
-        }
-
     }
 
 }
