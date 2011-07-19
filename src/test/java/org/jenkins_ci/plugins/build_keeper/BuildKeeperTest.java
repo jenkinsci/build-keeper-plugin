@@ -119,7 +119,9 @@ public class BuildKeeperTest extends HudsonTestCase {
     }
 
     private BuildKeeper createBuildKeeper(final int buildPeriod, final boolean dontKeepFailed, final boolean countFromLastKept) {
-        return new BuildKeeper(buildPeriod, dontKeepFailed, countFromLastKept);
+        final BuildKeeperPolicy policy = countFromLastKept ? new KeepSincePolicy(buildPeriod, dontKeepFailed)
+                                                           : new BuildNumberPolicy(buildPeriod, dontKeepFailed);
+        return new BuildKeeper(policy);
     }
 
     private static class PredictableResultBuilder extends TestBuilder {

@@ -30,13 +30,9 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Hudson;
-import hudson.model.Result;
-import hudson.model.Run;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
-import hudson.util.FormValidation;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 
 import java.io.IOException;
 
@@ -45,28 +41,15 @@ public class BuildKeeper extends BuildWrapper {
     private int buildPeriod;
     private boolean dontKeepFailed;
     private boolean countFromLastKept;
+    private BuildKeeperPolicy policy;
 
     @DataBoundConstructor
-    public BuildKeeper(final int buildPeriod, final boolean dontKeepFailed, final boolean countFromLastKept) {
-        this.buildPeriod = buildPeriod;
-        this.dontKeepFailed = dontKeepFailed;
-        this.countFromLastKept = countFromLastKept;
+    public BuildKeeper(final BuildKeeperPolicy policy) {
+        this.policy = policy;
     }
 
-    public int getBuildPeriod() {
-        return buildPeriod;
-    }
-
-    public boolean isDontKeepFailed() {
-        return dontKeepFailed;
-    }
-
-    public boolean isCountFromLastKept() {
-        return countFromLastKept;
-    }
-
-    private boolean isKeepFailed() {
-        return !dontKeepFailed;
+    public BuildKeeperPolicy getPolicy() {
+        return policy;
     }
 
     @Override
@@ -76,40 +59,16 @@ public class BuildKeeper extends BuildWrapper {
 
     @Override
     public Environment setUp(final AbstractBuild build, final Launcher launcher, final BuildListener listener) {
-        return countFromLastKept ? new RelativeCount() : new ByBuildNumber();
+        return new BuildKeeperEnvironment();
     }
 
-    final void keep(final Run run) throws IOException {
-        final Result result = run.getResult();
-        if (isKeepFailed() || ((result != null) && result.isBetterThan(Result.FAILURE)))
-            run.keepLog();
-    }
-
-    private class RelativeCount extends Environment {
+    private class BuildKeeperEnvironment extends Environment {
         @Override
         public boolean tearDown(final AbstractBuild build, final BuildListener listener) throws IOException, InterruptedException {
             if (build == null) return true;
-            Run current = build;
-            final int loop = buildPeriod > 0 ? buildPeriod -1 : 0;
-            for (int i = 0; i < loop; i++) {
-                if (current.getPreviousBuild() == null) break;
-                if (current.getPreviousBuild().isKeepLog()) return true;
-                current = current.getPreviousBuild();
-            }
-            keep(build);
+            policy.apply(build, listener);
             return true;
-        }        
-    }
-
-    private class ByBuildNumber extends Environment {
-        @Override
-        public boolean tearDown(final AbstractBuild build, final BuildListener listener) throws IOException, InterruptedException {
-            if (build == null) return true;
-            if ((build.getNumber() -1) % buildPeriod == 0) {
-                keep(build);
-            }
-            return true;
-        }        
+        }
     }
 
     @Extension
@@ -125,10 +84,14 @@ public class BuildKeeper extends BuildWrapper {
             return true;
         }
 
-        public FormValidation doCheckBuildPeriod(@QueryParameter final String value) {
-            return FormValidation.validatePositiveInteger(value);
-        }
+    }
 
+    public Object readResolve() {
+        if (policy == null) {
+            policy = countFromLastKept ? new KeepSincePolicy(buildPeriod, dontKeepFailed)
+                                       : new BuildNumberPolicy(buildPeriod, dontKeepFailed);
+        }
+        return this;
     }
 
 }

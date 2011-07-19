@@ -1,0 +1,48 @@
+<!--
+  ~ The MIT License
+  ~
+  ~ Copyright (C) 2010-2011 by Anthony Robinson
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+    <!-- <j:invokeStatic var="policies" method="all" class="org.jenkins_ci.plugins.build_keeper.BuildKeeperPolicy"/> -->
+
+    <div>
+        <p>Choose which builds are selected to be kept<br/>
+        See the documentation on the <a href="http://wiki.jenkins-ci.org/display/JENKINS/Build+Keeper+Plugin" target="_blank">wiki</a> for more information.</p>
+        
+        <dl><dt>Keep based on build number</dt>
+            <dd>This policy will look at the build number and will decide whether to keep only on the build number and whether <em>Dont keep failed</em> is
+            checked.<br/>
+            As this policy is not based on historical information, you can use a discard policy that only keeps a low (say 30) builds,
+            but <em>Keep every</em> can be set to 100, and every 100 builds will be kept e.g. 1, 101, 201.<br/>
+            The build number sequence is not affected if a build that would have been kept, was not kept because it was not good enough and <em>Dont keep
+            failed</em> is selected.<br/>
+            In the example above, if <em>Dont keep failed</em> is selected and build 101 failed, then the next build to keep will still be
+            201, regardless of how many successful builds there were in between.</dd>
+        
+            <dt>Keep since last kept</dt>
+            <dd>This policy will look backwards through the builds to find out whether a build has keep forever set within the <em>Keep every</em> range,
+            and if not, then this build will be kept.<br/>
+            This means that if a build has been kept for any other reason, eg manually selected, or via a promotion, then the period will reset
+            and unnecessary builds will not be kept.<br/>
+            If a build that would have been kept is not kept because <em>Dont keep failed</em> is selected, then the next successful build will be kept.</dd>
+        </dl>
+    </div>
