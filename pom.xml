@@ -86,9 +86,6 @@
                 <artifactId>maven-hpi-plugin</artifactId>
                 <version>1.67</version>
                 <extensions>true</extensions>
-                <configuration>
-                    <compatibleSinceVersion>0.3</compatibleSinceVersion>
-                </configuration>
             </plugin>
         </plugins>
     </build>
