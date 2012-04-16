@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.396</version>
+        <version>1.408</version>
     </parent>
 
     <artifactId>build-keeper-plugin</artifactId>
@@ -59,6 +59,11 @@
     </developers>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>run-condition</artifactId>
+            <version>0.8</version>
+        </dependency>
     </dependencies>
 
     <scm>
