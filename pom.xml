@@ -35,7 +35,7 @@
     <artifactId>build-keeper-plugin</artifactId>
     <packaging>hpi</packaging>
     <name>Build Keeper Plugin</name>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
     <description>Mark every x build as keep forever</description>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Build+Keeper+Plugin</url>
 
