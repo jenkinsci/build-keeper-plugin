@@ -26,10 +26,11 @@ package org.jenkins_ci.plugins.build_keeper;
 
 import hudson.model.FreeStyleProject;
 import org.jvnet.hudson.test.HudsonTestCase;
+import org.jvnet.hudson.test.JenkinsRule;
 
 import static org.jenkins_ci.plugins.build_keeper.Helper.buildAndAssertKeepForever;
 
-public class BuildKeeperTest extends HudsonTestCase {
+public class BuildKeeperTest extends JenkinsRule {
 
     public void testEvery3KeepsFirstAndFourthBuild() throws Exception {
         final FreeStyleProject project = createFreeStyleProject();

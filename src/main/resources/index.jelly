@@ -21,7 +21,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ THE SOFTWARE.
   -->
-
+<?jelly escape-by-default='true'?>
 <div>
     Automatically keep every x builds to enable long term analysis trending when discarding old builds
 </div>

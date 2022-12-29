@@ -31,6 +31,7 @@ import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Run;
 import org.jvnet.hudson.test.HudsonTestCase;
+import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.TestBuilder;
 
 import java.io.IOException;
@@ -40,8 +41,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.jenkins_ci.plugins.build_keeper.Helper.buildAndAssertKeepForever;
+import static org.junit.Assert.assertEquals;
 
-public class ByDayPolicyTest extends HudsonTestCase {
+public class ByDayPolicyTest extends JenkinsRule {
 
     static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
 

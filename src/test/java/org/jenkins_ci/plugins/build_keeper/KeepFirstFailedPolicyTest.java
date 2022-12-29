@@ -27,10 +27,13 @@ package org.jenkins_ci.plugins.build_keeper;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import org.jvnet.hudson.test.HudsonTestCase;
+import org.jvnet.hudson.test.JenkinsRule;
 
 import static org.jenkins_ci.plugins.build_keeper.Helper.buildAndAssertKeepForever;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class KeepFirstFailedPolicyTest extends HudsonTestCase {
+public class KeepFirstFailedPolicyTest extends JenkinsRule {
 
     public void testDontKeepIfRunTooShort() throws Exception {
         final FreeStyleProject project = createFreeStyleProject();
