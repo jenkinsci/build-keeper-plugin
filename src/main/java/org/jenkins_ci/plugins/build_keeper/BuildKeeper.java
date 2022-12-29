@@ -32,6 +32,7 @@ import hudson.model.BuildListener;
 import hudson.model.Hudson;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
+import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class BuildKeeper extends BuildWrapper {
 
     @Override
     public BuildKeeperDescriptor getDescriptor() {
-        return Hudson.getInstance().getDescriptorByType(BuildKeeperDescriptor.class);
+        return Jenkins.get().getDescriptorByType(BuildKeeperDescriptor.class);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class BuildKeeper extends BuildWrapper {
         }
 
         public BuildKeeperPolicy.BuildKeeperPolicyDescriptor getDefaultPolicy() {
-            return Hudson.getInstance().getDescriptorByType(ByDayPolicy.ByDayPolicyDescriptor.class);
+            return Jenkins.get().getDescriptorByType(ByDayPolicy.ByDayPolicyDescriptor.class);
         }
 
     }

@@ -31,19 +31,20 @@ import hudson.model.BuildListener;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
+import jenkins.model.Jenkins;
 
 import java.io.IOException;
 
 public abstract class BuildKeeperPolicy implements Describable<BuildKeeperPolicy>, ExtensionPoint {
 
     public static DescriptorExtensionList<BuildKeeperPolicy, BuildKeeperPolicyDescriptor> all() {
-        return Hudson.getInstance().<BuildKeeperPolicy, BuildKeeperPolicyDescriptor>getDescriptorList(BuildKeeperPolicy.class);
+        return Jenkins.get().<BuildKeeperPolicy, BuildKeeperPolicyDescriptor>getDescriptorList(BuildKeeperPolicy.class);
     }
 
     public abstract void apply(AbstractBuild build, BuildListener listener) throws IOException;
 
     public BuildKeeperPolicyDescriptor getDescriptor() {
-        return (BuildKeeperPolicyDescriptor)Hudson.getInstance().getDescriptor(getClass());
+        return (BuildKeeperPolicyDescriptor)Jenkins.get().getDescriptor(getClass());
     }
 
     public static abstract class BuildKeeperPolicyDescriptor extends Descriptor<BuildKeeperPolicy> {
